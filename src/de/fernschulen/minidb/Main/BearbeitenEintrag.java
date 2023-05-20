@@ -15,6 +15,15 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * This class represents a dialog for editing database entries.
+ * It extends {@link javax.swing.JDialog}, providing functionalities to read, delete and update database records.
+ * <p>
+ * It maintains an internal state connected to a specific SQL database via a {@link java.sql.Connection},
+ * and manipulates entries of the "adressen" table. Navigation through the records is also possible.
+ * It uses a GUI for interacting with the database records, providing JTextField for every database field.
+ * </p>
+ */
 public class BearbeitenEintrag extends JDialog {
     /*
      * ============================ MEMBER VARIABLES HERE =====================
@@ -50,6 +59,11 @@ public class BearbeitenEintrag extends JDialog {
 
     /*
      * ============================ CONSTRUCTOR =============================
+     */
+    /**
+     * Constructs a new instance of BearbeitenEintrag.
+     * @param parent the JFrame from which the dialog is displayed
+     * @param modal specifies whether dialog blocks user input to other top-level windows when shown
      */
     //der Konstruktor der Klasse BearbeitenEintrag
     public BearbeitenEintrag(JFrame parent, boolean modal) {
@@ -182,6 +196,9 @@ public class BearbeitenEintrag extends JDialog {
     /*
      * ========================= DATABASE RELATED METHODS ====================
      */
+    /**
+     * Method to initialize the database connection and load the first data entry into the GUI.
+     */
     private void initializeDB() {
         //zuerst nehmen wir alle Einträge aus der Tabelle adressen
         sqlQuery = "SELECT * FROM adressen";
@@ -193,6 +210,9 @@ public class BearbeitenEintrag extends JDialog {
         updateInfoLabel();
     }
 
+    /**
+     * Method to initialize the database connection and prepare a {@link java.sql.ResultSet} for future actions.
+     */
     private void initDB() {
         try{
             //Verbindung herstellen und Ergebnismenge beschaffen
@@ -353,6 +373,12 @@ public class BearbeitenEintrag extends JDialog {
     /*
      * ================== UTILITY METHODS ==========================
      */
+
+    /**
+     * Method to load a specific ImageIcon based on a given command.
+     * @param actionCommand command to specify which ImageIcon to load
+     * @return ImageIcon to be used for an action
+     */
     private ImageIcon loadImageIcon(String actionCommand) {
         URL imageUrl = getClass().getResource(IMAGE_BASE_PATH + ICON_MAP.get(actionCommand));
         if (imageUrl != null) {
@@ -363,6 +389,11 @@ public class BearbeitenEintrag extends JDialog {
             return null;
         }
     }
+
+    /**
+     * Method to create error dialog when exceptions are encountered.
+     * @param e the exception to be displayed in the dialog
+     */
     private void showErrorDialog(Exception e) {
         JOptionPane.showMessageDialog(this, "Problem: \n" + e.toString());
     }
@@ -371,7 +402,10 @@ public class BearbeitenEintrag extends JDialog {
      * ==================== INNER CLASSES =========================
      */
 
-
+    /**
+     * Inner class for defining actions on database entries.
+     * Extends {@link javax.swing.AbstractAction} and provides cases to handle specific action commands.
+     */
     //eine innere Klasse für die Aktionen
     class MeineAktionen extends AbstractAction {
 
@@ -399,7 +433,10 @@ public class BearbeitenEintrag extends JDialog {
             }
         }
     }
-
+    /**
+     * Inner class for handling window closing events.
+     * Extends {@link java.awt.event.WindowAdapter} and overrides windowClosing() method to close the database connection when the window is closing.
+     */
     //die innere Klasse für die Fensterereignisse
     class FensterListener extends WindowAdapter {
         @Override
