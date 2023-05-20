@@ -16,8 +16,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -36,6 +35,13 @@ public class ListenAnzeige extends JDialog{
 
     /*
      * ============================ CONSTRUCTOR =============================
+     */
+
+    /**
+     * Constructor for the ListenAnzeige class.
+     *
+     * @param parent the parent JFrame
+     * @param modal modal a boolean indicating whether the dialog should be modal
      */
     public ListenAnzeige(JFrame parent, boolean modal) {
         super(parent, modal);
@@ -58,11 +64,21 @@ public class ListenAnzeige extends JDialog{
      */
 
     //die Methode liest die Daten ein und zeigt sie an
+
+    /**
+     * Reads the data and displays it.
+     */
     private void lesen() {
         List<Map<String, String>> data = fetchData();
         displayData(data);
 
     }
+
+    /**
+     * Fetches data from the database.
+     * @return a list of maps where each map represents a row in the database,
+     * with keys being the column names and values being the corresponding field values
+     */
     private List<Map<String, String>> fetchData() {
         List<Map<String, String>> data = new ArrayList<>();
         try (Connection connection = MiniDBTools.oeffnenDB(DB_URL);
@@ -80,10 +96,17 @@ public class ListenAnzeige extends JDialog{
             }
         }
         catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Problem: \n" + e.toString());
+            JOptionPane.showMessageDialog(this, "Problem: \n" + e);
         }
         return data;
     }
+
+    /**
+     * Display the fetched data on the panel.
+     *
+     * @param data a list of maps where each map represents a row in the database,
+     *             with keys being the column names and values being the corresponding field values.
+     */
     private void displayData(List<Map<String, String>> data) {
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(0,2));
@@ -106,7 +129,15 @@ public class ListenAnzeige extends JDialog{
      * ==================== INNER CLASSES =========================
      */
 
+    /**
+     * Inner class for handling button click events.
+     */
     class ListenListener implements ActionListener {
+        /**
+         * The method to be executed when an action event is detected.
+         *
+         * @param e the event to be processed
+         */
         @Override
         public void actionPerformed(ActionEvent e) {
             //wurde auf OK geklickt?

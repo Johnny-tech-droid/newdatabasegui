@@ -4,15 +4,11 @@
  * newdatabasegui
  * de.fernschulen.minidb.Main.util
  */
-/**
- * This class is a GuiHelper that extracts the logic of creating the GUI
- * Components to reduce repetition
- * initTextFields
- */
+
+
 
 package de.fernschulen.minidb.Main.util;
 
-import de.fernschulen.minidb.Main.BearbeitenEintrag;
 
 import javax.swing.*;
 import java.awt.*;
@@ -52,7 +48,7 @@ public class GuiComponentFactory {
         }
         return panel;
     }
-    public JLabel createLabel(String text) {
+    public static JLabel createLabel(String text) {
         return new JLabel(text);
     }
     public GuiComponentFactory() {

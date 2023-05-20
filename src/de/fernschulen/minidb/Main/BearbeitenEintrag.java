@@ -1,5 +1,6 @@
 package de.fernschulen.minidb.Main;
 
+import de.fernschulen.minidb.Main.util.GuiComponentFactory;
 import de.fernschulen.minidb.Main.util.MiniDBTools;
 import de.fernschulen.minidb.Main.util.Properties;
 
@@ -92,6 +93,7 @@ public class BearbeitenEintrag extends JDialog {
     /*
      * ========================== GUI RELATED METHODS ========================
      */
+
     private void addComponents() {
         //die Symbolleiste oben einfügen
         add(symbolleiste(), BorderLayout.NORTH);
@@ -110,7 +112,7 @@ public class BearbeitenEintrag extends JDialog {
         //wir nehmen ein Borderlayout
         setLayout(new BorderLayout());
     }
-
+    // Diese Methode initialisiert die Aktionen, inkl. Beschreibung, Icon und actionText
     private void initActions() {
         loeschenAct = new MeineAktionen("Datensatz löschen",
                 loadImageIcon("loeschen"),
@@ -144,16 +146,18 @@ public class BearbeitenEintrag extends JDialog {
                 "aktualisieren");
 
     }
-
+    // Methode initialisiert TextFelder
     private void initTextFields() {
         textFields = new HashMap<>();
         for (String fieldName : FIELD_NAMES) {
             textFields.put(fieldName, new JTextField());
         }
     }
-
+    // Methode initialisiert Labels in einem Panel
     private JPanel initLabelPanel() {
-        infoLabel = new JLabel("Datensatz: 1 von x");
+
+
+        infoLabel = GuiComponentFactory.createLabel("Datensatz: 1 von x");
         JPanel panel = new JPanel();
         panel.add(infoLabel);
 

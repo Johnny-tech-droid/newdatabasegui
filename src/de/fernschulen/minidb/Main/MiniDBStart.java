@@ -26,6 +26,13 @@ public class MiniDBStart extends JFrame {
     /*
      * ============================= CONSTRUCTOR =========================================
      */
+
+    /**
+     * Constructor for the MiniDBStart class.
+     *
+     * @param title the title of the JFrame
+     * @throws HeadlessException if the device does not have a display, keyboard, or  mouse
+     */
     public MiniDBStart(String title) throws HeadlessException {
         super(title);
         setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -35,6 +42,10 @@ public class MiniDBStart extends JFrame {
     /*
      * ============================= GUI RELATED METHODS =================================
      */
+
+    /**
+     * Initialize the action map with actions to be taken when buttons are clicked
+     */
     private void initActions() {
         actions = new HashMap<>();
         actions.put(ACTION_COMMANDS[0], this::anzeigeListe);
@@ -43,6 +54,10 @@ public class MiniDBStart extends JFrame {
         actions.put(ACTION_COMMANDS[3], this::beenden);
     }
 
+    /**
+     * Initialize the GUI components and add them to the JFrame
+     *
+     */
     private void initGui() {
         MeinListener listener = new MeinListener();
         JPanel panel = createButtonPanel(listener);
@@ -53,6 +68,11 @@ public class MiniDBStart extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * Create a panel containing buttons, each associated with an action.
+     * @param listener the ActionListener to be attached to the buttons.
+     * @return a JPanel object containing buttons
+     */
     private JPanel createButtonPanel(ActionListener listener) {
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(0,4));
@@ -72,17 +92,32 @@ public class MiniDBStart extends JFrame {
      * =========================== METHODS RELATED TO ACTIONS ====================================
      */
     // This belongs to a ViewController, not a View
+
+    /**
+     * Exit the application
+     */
     private void beenden() {
         System.exit(0);
     }
 
+    /**
+     * Open a new dialog for adding an entry
+     */
     private void neuerEintrag() {
         new NeuerEintrag(this, true);
     }
 
+    /**
+     * Open a new dialog for displaying an individual entry
+     */
+
     private void anzeigeEinzel() {
         new BearbeitenEintrag(this, true);
     }
+
+    /**
+     * Open a new dialog for displaying a list of entries.
+     */
 
     private void anzeigeListe() {
         new ListenAnzeige(this, true);
@@ -90,7 +125,16 @@ public class MiniDBStart extends JFrame {
     /*
      * ====================================== INNER CLASSES ======================================
      */
+
+    /**
+     * Inner class for handling button click events.
+     */
     class MeinListener implements ActionListener {
+        /**
+         * The method to be executed when an action event is detected.
+         *
+         * @param e the event to be processed
+         */
 
         @Override
         public void actionPerformed(ActionEvent e) {
