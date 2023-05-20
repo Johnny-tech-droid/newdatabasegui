@@ -453,7 +453,7 @@ public class BearbeitenEintrag extends JDialog {
                 MiniDBTools.schliessenDB(DB_URL);
             }
             catch(Exception exc) {
-                JOptionPane.showMessageDialog(null, "Problem: \n" + exc.toString());
+                JOptionPane.showMessageDialog(null, "Problem: \n" + exc);
             }
         }
     }
