@@ -49,9 +49,9 @@ public class ListView extends JDialog{
         setLayout(new FlowLayout(FlowLayout.CENTER));
 
         //die Daten lesen
-        lesen();
+        readData();
         //die Schaltfläche
-        JButton ok = GuiComponentFactory.createButton("Ok", "ok", new ListenListener());
+        JButton ok = GuiComponentFactory.createButton("Ok", "ok", new ListListener());
         add(ok);
         //Größe setzen und anzeigen
         setSize(440, 700);
@@ -68,7 +68,7 @@ public class ListView extends JDialog{
     /**
      * Reads the data and displays it.
      */
-    private void lesen() {
+    private void readData() {
         List<Map<String, String>> data = fetchData();
         displayData(data);
 
@@ -132,7 +132,7 @@ public class ListView extends JDialog{
     /**
      * Inner class for handling button click events.
      */
-    class ListenListener implements ActionListener {
+    class ListListener implements ActionListener {
         /**
          * The method to be executed when an action event is detected.
          *

@@ -70,7 +70,7 @@ public class NewEntry extends JDialog{
     }
     private JPanel initButtonPanel() {
         JPanel panel = new JPanel();
-        NeuListener listener = new NeuListener();
+        NewEntryListener listener = new NewEntryListener();
         panel.add(GuiComponentFactory.createButton("Ok", "ok", listener));
         panel.add(GuiComponentFactory.createButton("Abbrechen", "abbrechen", listener));
         return panel;
@@ -80,7 +80,7 @@ public class NewEntry extends JDialog{
     /*
      * ========================= DATABASE RELATED METHODS ====================
      */
-    private void uebernehmen() {
+    private void applyChanges() {
 
 
         try (Connection connection = MiniDBTools.oeffnenDB(DB_URL);
@@ -108,13 +108,13 @@ public class NewEntry extends JDialog{
      * ==================== INNER CLASSES =========================
      */
     //die innere Klasse für den ActionListener
-    class NeuListener implements ActionListener {
+    class NewEntryListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             //wurde auf OK geklickt?
             if (e.getActionCommand().equals("ok")) {
                 //dann die Daten übernehmen
-                uebernehmen();
+                applyChanges();
                 dispose();
             }
 
