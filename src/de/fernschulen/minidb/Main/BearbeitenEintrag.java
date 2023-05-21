@@ -13,8 +13,10 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * This class represents a dialog for editing database entries.
@@ -147,40 +149,34 @@ public class BearbeitenEintrag extends JDialog {
 
     }
     // Methode initialisiert TextFelder
+
     private void initTextFields() {
-        textFields = new HashMap<>();
-        for (String fieldName : FIELD_NAMES) {
-            textFields.put(fieldName, new JTextField());
-        }
+        textFields = Arrays.stream(FIELD_NAMES)
+                .collect(Collectors.toMap(Function.identity(), name -> new JTextField()));
     }
-    // Methode initialisiert Labels in einem Panel
+
     private JPanel initLabelPanel() {
-
-
         infoLabel = GuiComponentFactory.createLabel("Datensatz: 1 von x");
         JPanel panel = new JPanel();
         panel.add(infoLabel);
-
         return panel;
     }
-    //fügt die Felder in ein Panel ein und liefert das Panel zurück
+
     private JPanel initGui() {
-        JPanel tempPanel = new JPanel();
-        //im GridLayout mit zwei Spalten
-        tempPanel.setLayout(new GridLayout(0, 2));
-        //für die Nummer (nur Anzeige)
+        initTextFields();
+        JPanel tempPanel = new JPanel(new GridLayout(0, 2));
         tempPanel.add(new JLabel("ID-Nummer:"));
         nummer = new JLabel();
         tempPanel.add(nummer);
 
-        initTextFields();
-        for (String fieldName : FIELD_NAMES) {
-            tempPanel.add(new JLabel(fieldName.toUpperCase() + ":"));
-            tempPanel.add(textFields.get(fieldName));
-        }
-        //zurückgeben
+        Arrays.asList(FIELD_NAMES).forEach(name -> {
+            tempPanel.add(new JLabel(name.toUpperCase() + ":"));
+            tempPanel.add(textFields.get(name));
+        });
+
         return tempPanel;
     }
+
     //die Symbolleiste erzeugen und zurückgeben
     private JToolBar symbolleiste() {
         JToolBar leiste = new JToolBar();
@@ -207,10 +203,11 @@ public class BearbeitenEintrag extends JDialog {
         //zuerst nehmen wir alle Einträge aus der Tabelle adressen
         sqlQuery = "SELECT * FROM adressen";
         //diese Abfrage wählt nur alle Müllers aus
-        //sqlQuery = "SELECT * FROM adressen WHERE nachname = 'Müller'";
 
         //die Datenbankverbindung herstellen
         initDB();
+        // ==================================== //
+        // Teil der Aufgabe 1 des Studienhefts
         updateInfoLabel();
     }
 
@@ -225,7 +222,7 @@ public class BearbeitenEintrag extends JDialog {
             if (resultSet.next())
                 datenLesen();
         }
-        catch(Exception e) {
+        catch(SQLException e) {
             showErrorDialog(e);
         }
     }
@@ -236,10 +233,12 @@ public class BearbeitenEintrag extends JDialog {
                 textFields.get(fieldName).setText(resultSet.getString(resultSet.findColumn(fieldName)));
             }
         }
-        catch(Exception e) {
+        catch(SQLException e) {
             showErrorDialog(e);
         }
     }
+    // ==================================== //
+    // Teil der Aufgabe 1 des Studienhefts
     private int getTotalRowCount() {
         int rowCount = 0;
         try {
@@ -252,6 +251,8 @@ public class BearbeitenEintrag extends JDialog {
         }
         return rowCount;
     }
+    // ==================================== //
+    // Teil der Aufgabe 1 des Studienhefts
     private void updateInfoLabel() {
         try {
             int currentRow = resultSet.getRow();
@@ -268,10 +269,12 @@ public class BearbeitenEintrag extends JDialog {
             //ganz nach vorne gehen
             resultSet.first();
             datenLesen();
+            // ==================================== //
+            // Teil der Aufgabe 1 des Studienhefts
             updateInfoLabel();
         }
 
-        catch(Exception e) {
+        catch(SQLException e) {
             showErrorDialog(e);
         }
     }
@@ -282,9 +285,11 @@ public class BearbeitenEintrag extends JDialog {
             //ganz nach hinten gehen
             resultSet.last();
             datenLesen();
+            // ==================================== //
+            // Teil der Aufgabe 1 des Studienhefts
             updateInfoLabel();
         }
-        catch(Exception e) {
+        catch(SQLException e) {
             showErrorDialog(e);
         }
     }
@@ -293,13 +298,17 @@ public class BearbeitenEintrag extends JDialog {
     private void einenVor() {
         try {
             //gibt es noch einen Datensatz?
-            if (resultSet.next()) {
-                datenLesen();
-                updateInfoLabel();
+            if (!resultSet.isLast()){
+                if (resultSet.next()) {
+                    datenLesen();
+                    // ==================================== //
+                    // Teil der Aufgabe 1 des Studienhefts
+                    updateInfoLabel();
+                }
             }
 
         }
-        catch(Exception e) {
+        catch(SQLException e) {
             showErrorDialog(e);
         }
     }
@@ -307,14 +316,18 @@ public class BearbeitenEintrag extends JDialog {
     //die Methode geht einen Datensatz zurück
     private void einenZurueck() {
         try{
-            //gibt es noch einen Datensatz davor?
-            if (resultSet.previous()) {
-                datenLesen();
-                updateInfoLabel();
+            if (!resultSet.isFirst()) {
+                //gibt es noch einen Datensatz davor?
+                if (resultSet.previous()) {
+                    datenLesen();
+                    // ==================================== //
+                    // Teil der Aufgabe 1 des Studienhefts
+                    updateInfoLabel();
+                }
             }
 
         }
-        catch(Exception e) {
+        catch(SQLException e) {
             showErrorDialog(e);
         }
     }
@@ -340,9 +353,11 @@ public class BearbeitenEintrag extends JDialog {
                 resultSet.last();
             //die Daten neu lesen
             datenLesen();
+            // ==================================== //
+            // Teil der Aufgabe 1 des Studienhefts
             updateInfoLabel();
         }
-        catch(Exception e) {
+        catch(SQLException e) {
             showErrorDialog(e);
         }
     }
@@ -368,9 +383,11 @@ public class BearbeitenEintrag extends JDialog {
             resultSet.absolute(position);
             //die Daten neu lesen
             datenLesen();
+            // ==================================== //
+            // Teil der Aufgabe 1 des Studienhefts
             updateInfoLabel();
         }
-        catch(Exception e) {
+        catch(SQLException e) {
             showErrorDialog(e);
         }
     }
@@ -398,7 +415,7 @@ public class BearbeitenEintrag extends JDialog {
      * Method to create error dialog when exceptions are encountered.
      * @param e the exception to be displayed in the dialog
      */
-    private void showErrorDialog(Exception e) {
+    private void showErrorDialog(SQLException e) {
         JOptionPane.showMessageDialog(this, "Problem: \n" + e.toString());
     }
 

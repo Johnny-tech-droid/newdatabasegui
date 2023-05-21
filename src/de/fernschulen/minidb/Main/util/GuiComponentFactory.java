@@ -30,7 +30,7 @@ public class GuiComponentFactory {
         return button;
     }
 
-    public Map<String, JTextField> createTextFields(String[] fieldNames) {
+    public static Map<String, JTextField> createTextFields(String[] fieldNames) {
         Map<String, JTextField> textFields = new HashMap<>();
         for (String fieldName : fieldNames) {
             JTextField textField = new JTextField();
@@ -38,7 +38,7 @@ public class GuiComponentFactory {
         }
         return textFields;
     }
-    public JPanel createTextFieldPanel(String[] fieldNames) {
+    public static JPanel createTextFieldPanel(String[] fieldNames) {
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(0,2));
         Map<String, JTextField> textFields = createTextFields(fieldNames);
