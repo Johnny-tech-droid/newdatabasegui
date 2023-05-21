@@ -31,10 +31,12 @@ public class EditEntry extends JDialog {
     /*
      * ============================ MEMBER VARIABLES HERE =====================
      */
-
+    // fuer die Eingabefelder
     private static final String[] FIELD_NAMES = Properties.getFIELD_NAMES();
     private Map<String, JTextField> textFields;
+    // fuer das Statuslabel zu Einsendeaufgabe Nr. 1
     private static JLabel infoLabel;
+    // Konstante vereinbaren fuer die Url zur Datenbank.
     private static final String DB_URL = Properties.getDbUrl();
 
    // für die ImageIcons
@@ -107,7 +109,7 @@ public class EditEntry extends JDialog {
         // das Label fuer die anzeige Datensatz x von y
         add(initLabelPanel(), BorderLayout.SOUTH);
     }
-
+    // extrahiert aus dem Konstruktor, um diesen zu verschlanken
     private void initializeWindow() {
         setTitle("Einträge bearbeiten");
 
@@ -115,6 +117,7 @@ public class EditEntry extends JDialog {
         setLayout(new BorderLayout());
     }
     // Diese Methode initialisiert die Aktionen, inkl. Beschreibung, Icon und actionText
+    // extrahiert vom Konstruktor des originalen Codes
     private void initActions() {
         loeschenAct = new MyActions("Datensatz löschen",
                 loadImageIcon("loeschen"),
@@ -150,17 +153,32 @@ public class EditEntry extends JDialog {
     }
     // Methode initialisiert TextFelder
 
+    /**
+     * Initializes text fields using FIELD_NAMES as keys for a map,
+     * where each key is associated with a new JTextField instance.
+     */
     private void initTextFields() {
         textFields = Arrays.stream(FIELD_NAMES)
                 .collect(Collectors.toMap(Function.identity(), name -> new JTextField()));
     }
 
+    /**
+     * Initializes a JPanel which contains an info label.
+     * @return the initialized JPanel.
+     */
     private JPanel initLabelPanel() {
         infoLabel = GuiComponentFactory.createLabel("Datensatz: 1 von x");
         JPanel panel = new JPanel();
         panel.add(infoLabel);
         return panel;
     }
+
+    /**
+     * Initializes a JPanel that represents the GUI of this class.
+     * The GUI contains several JLabels and JTextFields for displaying
+     * and modifying data, and a JLabel for displaying the current ID number.
+     * @return the initialized JPanel
+     */
 
     private JPanel initGui() {
         initTextFields();
@@ -178,6 +196,13 @@ public class EditEntry extends JDialog {
     }
 
     //die Symbolleiste erzeugen und zurückgeben
+
+    /**
+     * Creates a JToolBar that contains a collection of Actions,
+     * which allow the user to interact with the application.
+     *
+     * @return the initialized JToolBar
+     */
     private JToolBar createToolBar() {
         JToolBar leiste = new JToolBar();
         //die Symbole über die Aktionen einbauen
@@ -197,7 +222,9 @@ public class EditEntry extends JDialog {
      * ========================= DATABASE RELATED METHODS ====================
      */
     /**
-     * Method to initialize the database connection and load the first data entry into the GUI.
+     * Method to initialize the database connection,
+     * runs an SQL query to retrieve data,
+     * and load the first data entry into the GUI.
      */
     private void initializeDB() {
         //zuerst nehmen wir alle Einträge aus der Tabelle adressen
@@ -212,7 +239,8 @@ public class EditEntry extends JDialog {
     }
 
     /**
-     * Method to initialize the database connection and prepare a {@link java.sql.ResultSet} for future actions.
+     * Establishes a connection with the database
+     * and prepares a ResultSet for future actions.
      */
     private void initDB() {
         try{
@@ -226,6 +254,11 @@ public class EditEntry extends JDialog {
             showErrorDialog(e);
         }
     }
+
+    /**
+     * Reads data from the current row of the ResultSet
+     * and updates the text fields and the ID number label in the GUI.
+     */
     private void readData() {
         try {
             nummer.setText(Integer.toString(resultSet.getInt(1)));
@@ -239,6 +272,12 @@ public class EditEntry extends JDialog {
     }
     // ==================================== //
     // Teil der Aufgabe 1 des Studienhefts
+
+    /**
+     * gets currentRow where the pointer points at
+     * and the totalRowCount and returns the totalRowCount
+     * @return the rowCount of the ResultSet
+     */
     private int getTotalRowCount() {
         int rowCount = 0;
         try {
@@ -253,6 +292,12 @@ public class EditEntry extends JDialog {
     }
     // ==================================== //
     // Teil der Aufgabe 1 des Studienhefts
+
+    /**
+     * updates the InfoLabel where the current and totalRowCount is displayed.
+     * takes the currentRow with resultSet.getRow() and the totalRowCount with
+     * getTotalRowCount. Then displays both int values with the JLabel
+     */
     private void updateInfoLabel() {
         try {
             int currentRow = resultSet.getRow();
