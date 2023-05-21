@@ -18,7 +18,7 @@ import java.util.Map;
 
 /**
  * In this class the GUI Component Factories are created.
- * For ListenAnzeige.java and NeuerEintrag.java the initialization of Buttons and ButtonPanels
+ * For ListView.java and NewEntry.java the initialization of Buttons and ButtonPanels
  * is repetitive code.
  */
 public class GuiComponentFactory {

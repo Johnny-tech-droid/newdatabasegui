@@ -1,5 +1,5 @@
 /**
- * ListenAnzeige.java
+ * ListView.java
  * Created by Johnny-tech-droid on 18.05.23
  * newdatabasegui
  * de.fernschulen.minidb.Main
@@ -24,7 +24,7 @@ import java.sql.SQLException;
 import java.util.*;
 import java.util.List;
 
-public class ListenAnzeige extends JDialog{
+public class ListView extends JDialog{
     /*
      * ============================ MEMBER VARIABLES HERE =====================
      */
@@ -38,12 +38,12 @@ public class ListenAnzeige extends JDialog{
      */
 
     /**
-     * Constructor for the ListenAnzeige class.
+     * Constructor for the ListView class.
      *
      * @param parent the parent JFrame
      * @param modal modal a boolean indicating whether the dialog should be modal
      */
-    public ListenAnzeige(JFrame parent, boolean modal) {
+    public ListView(JFrame parent, boolean modal) {
         super(parent, modal);
         setTitle("Listenanzeige");
         setLayout(new FlowLayout(FlowLayout.CENTER));

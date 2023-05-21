@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
  * It uses a GUI for interacting with the database records, providing JTextField for every database field.
  * </p>
  */
-public class BearbeitenEintrag extends JDialog {
+public class EditEntry extends JDialog {
     /*
      * ============================ MEMBER VARIABLES HERE =====================
      */
@@ -53,7 +53,7 @@ public class BearbeitenEintrag extends JDialog {
     //für die Anzeige
     private JLabel nummer;
     //für die Aktionen
-    private MeineAktionen loeschenAct, vorAct, zurueckAct, startAct, endeAct, aktualisierenAct;
+    private MyActions loeschenAct, vorAct, zurueckAct, startAct, endeAct, aktualisierenAct;
     //für die Verbindung
     private Connection connection;
     private ResultSet resultSet;
@@ -64,12 +64,12 @@ public class BearbeitenEintrag extends JDialog {
      * ============================ CONSTRUCTOR =============================
      */
     /**
-     * Constructs a new instance of BearbeitenEintrag.
+     * Constructs a new instance of EditEntry.
      * @param parent the JFrame from which the dialog is displayed
      * @param modal specifies whether dialog blocks user input to other top-level windows when shown
      */
-    //der Konstruktor der Klasse BearbeitenEintrag
-    public BearbeitenEintrag(JFrame parent, boolean modal) {
+    //der Konstruktor der Klasse EditEntry
+    public EditEntry(JFrame parent, boolean modal) {
         super(parent, modal);
         initializeWindow();
         //die Aktionen erstellen
@@ -80,7 +80,7 @@ public class BearbeitenEintrag extends JDialog {
 
 
         //die Verbindung mit dem Listener des Fensters herstellen
-        addWindowListener(new FensterListener());
+        addWindowListener(new WindowListener());
 
         //packen und anzeigen
         pack();
@@ -98,7 +98,7 @@ public class BearbeitenEintrag extends JDialog {
 
     private void addComponents() {
         //die Symbolleiste oben einfügen
-        add(symbolleiste(), BorderLayout.NORTH);
+        add(createToolBar(), BorderLayout.NORTH);
 
 
         //die Oberfläche erstellen und einfügen
@@ -116,32 +116,32 @@ public class BearbeitenEintrag extends JDialog {
     }
     // Diese Methode initialisiert die Aktionen, inkl. Beschreibung, Icon und actionText
     private void initActions() {
-        loeschenAct = new MeineAktionen("Datensatz löschen",
+        loeschenAct = new MyActions("Datensatz löschen",
                 loadImageIcon("loeschen"),
                 "Löscht den aktuellen Datensatz",
                 null,
                 "loeschen");
-        vorAct = new MeineAktionen("Einen Datensatz weiter",
+        vorAct = new MyActions("Einen Datensatz weiter",
                 loadImageIcon("einenvor"),
                 "Blättert einen Datensatz weiter",
                 null,
                 "einenvor");
-        zurueckAct = new MeineAktionen("Einen Datensatz zurück",
+        zurueckAct = new MyActions("Einen Datensatz zurück",
                 loadImageIcon("einenzurueck"),
                 "Blättert einen Datensatz zurück",
                 null,
                 "einenzurueck");
-        startAct = new MeineAktionen("Zum ersten Datensatz",
+        startAct = new MyActions("Zum ersten Datensatz",
                 loadImageIcon("vor"),
                 "Geht zum ersten Datensatz",
                 null,
                 "vor");
-        endeAct = new MeineAktionen("Zum letzten Datensatz",
+        endeAct = new MyActions("Zum letzten Datensatz",
                 loadImageIcon("zurueck"),
                 "Geht zum letzten Datensatz",
                 null,
                 "zurueck");
-        aktualisierenAct = new MeineAktionen("Änderungen speichern",
+        aktualisierenAct = new MyActions("Änderungen speichern",
                 loadImageIcon("aktualisieren"),
                 "Speichert Änderungen am aktuellen Datensatz",
                 null,
@@ -178,7 +178,7 @@ public class BearbeitenEintrag extends JDialog {
     }
 
     //die Symbolleiste erzeugen und zurückgeben
-    private JToolBar symbolleiste() {
+    private JToolBar createToolBar() {
         JToolBar leiste = new JToolBar();
         //die Symbole über die Aktionen einbauen
         Action[] actions = {loeschenAct, aktualisierenAct, startAct, zurueckAct, vorAct, endeAct};
@@ -220,13 +220,13 @@ public class BearbeitenEintrag extends JDialog {
             connection =MiniDBTools.oeffnenDB(DB_URL);
             resultSet = MiniDBTools.liefereErgebnis(connection, sqlQuery);
             if (resultSet.next())
-                datenLesen();
+                readData();
         }
         catch(SQLException e) {
             showErrorDialog(e);
         }
     }
-    private void datenLesen() {
+    private void readData() {
         try {
             nummer.setText(Integer.toString(resultSet.getInt(1)));
             for (String fieldName : FIELD_NAMES) {
@@ -264,11 +264,11 @@ public class BearbeitenEintrag extends JDialog {
     }
 
     //die Methode geht zum ersten Datensatz
-    private void ganzVor() {
+    private void moveToFirst() {
         try {
             //ganz nach vorne gehen
             resultSet.first();
-            datenLesen();
+            readData();
             // ==================================== //
             // Teil der Aufgabe 1 des Studienhefts
             updateInfoLabel();
@@ -280,11 +280,11 @@ public class BearbeitenEintrag extends JDialog {
     }
 
     //die Methode geht zum letzten Datensatz
-    private void ganzZurueck() {
+    private void moveToLast() {
         try {
             //ganz nach hinten gehen
             resultSet.last();
-            datenLesen();
+            readData();
             // ==================================== //
             // Teil der Aufgabe 1 des Studienhefts
             updateInfoLabel();
@@ -295,12 +295,12 @@ public class BearbeitenEintrag extends JDialog {
     }
 
     //die Methode geht einen Datensatz weiter
-    private void einenVor() {
+    private void moveOneForward() {
         try {
             //gibt es noch einen Datensatz?
             if (!resultSet.isLast()){
                 if (resultSet.next()) {
-                    datenLesen();
+                    readData();
                     // ==================================== //
                     // Teil der Aufgabe 1 des Studienhefts
                     updateInfoLabel();
@@ -314,12 +314,12 @@ public class BearbeitenEintrag extends JDialog {
     }
 
     //die Methode geht einen Datensatz zurück
-    private void einenZurueck() {
+    private void moveOneBack() {
         try{
             if (!resultSet.isFirst()) {
                 //gibt es noch einen Datensatz davor?
                 if (resultSet.previous()) {
-                    datenLesen();
+                    readData();
                     // ==================================== //
                     // Teil der Aufgabe 1 des Studienhefts
                     updateInfoLabel();
@@ -333,7 +333,7 @@ public class BearbeitenEintrag extends JDialog {
     }
 
     //die Methode löscht einen Datensatz
-    private void loeschen() {
+    private void deleteDataset() {
         try {
             //wir müssen uns merken, wo wir sind
             int position;
@@ -352,7 +352,7 @@ public class BearbeitenEintrag extends JDialog {
                 //dann zum letzten gehen
                 resultSet.last();
             //die Daten neu lesen
-            datenLesen();
+            readData();
             // ==================================== //
             // Teil der Aufgabe 1 des Studienhefts
             updateInfoLabel();
@@ -363,7 +363,7 @@ public class BearbeitenEintrag extends JDialog {
     }
 
     //die Methode aktualisiert einen Eintrag
-    private void aktualisieren() {
+    private void refreshDb() {
         try {
             //wir müssen uns merken, wo wir sind
             int position;
@@ -382,7 +382,7 @@ public class BearbeitenEintrag extends JDialog {
             //und wieder zur "alten" Position gehen
             resultSet.absolute(position);
             //die Daten neu lesen
-            datenLesen();
+            readData();
             // ==================================== //
             // Teil der Aufgabe 1 des Studienhefts
             updateInfoLabel();
@@ -428,10 +428,10 @@ public class BearbeitenEintrag extends JDialog {
      * Extends {@link javax.swing.AbstractAction} and provides cases to handle specific action commands.
      */
     //eine innere Klasse für die Aktionen
-    class MeineAktionen extends AbstractAction {
+    class MyActions extends AbstractAction {
 
         //der Konstruktor
-        public MeineAktionen(String text, ImageIcon icon, String beschreibung, KeyStroke shortcut, String actionText) {
+        public MyActions(String text, ImageIcon icon, String beschreibung, KeyStroke shortcut, String actionText) {
             //den Konstruktor der übergeordneten Klasse mit dem Text und dem Icon aufrufen
             super(text, icon);
             //die Beschreibung setzen für den Bildschirmtipp
@@ -445,12 +445,12 @@ public class BearbeitenEintrag extends JDialog {
         @Override
         public void actionPerformed(ActionEvent e) {
             switch (e.getActionCommand()) {
-                case "vor" -> ganzVor();
-                case "zurueck" -> ganzZurueck();
-                case "einenvor" -> einenVor();
-                case "einenzurueck" -> einenZurueck();
-                case "loeschen" -> loeschen();
-                case "aktualisieren" -> aktualisieren();
+                case "vor" -> moveToFirst();
+                case "zurueck" -> moveToLast();
+                case "einenvor" -> moveOneForward();
+                case "einenzurueck" -> moveOneBack();
+                case "loeschen" -> deleteDataset();
+                case "aktualisieren" -> refreshDb();
             }
         }
     }
@@ -459,7 +459,7 @@ public class BearbeitenEintrag extends JDialog {
      * Extends {@link java.awt.event.WindowAdapter} and overrides windowClosing() method to close the database connection when the window is closing.
      */
     //die innere Klasse für die Fensterereignisse
-    class FensterListener extends WindowAdapter {
+    class WindowListener extends WindowAdapter {
         @Override
         public void windowClosing(WindowEvent e) {
             super.windowClosing(e);
@@ -469,8 +469,8 @@ public class BearbeitenEintrag extends JDialog {
         }
         private void closeDBConnection() {
             try {
-                BearbeitenEintrag.this.resultSet.close();
-                BearbeitenEintrag.this.connection.close();
+                EditEntry.this.resultSet.close();
+                EditEntry.this.connection.close();
                 MiniDBTools.schliessenDB(DB_URL);
             }
             catch(Exception exc) {

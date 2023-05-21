@@ -104,7 +104,7 @@ public class MiniDBStart extends JFrame {
      * Open a new dialog for adding an entry
      */
     private void neuerEintrag() {
-        new NeuerEintrag(this, true);
+        new NewEntry(this, true);
     }
 
     /**
@@ -112,7 +112,7 @@ public class MiniDBStart extends JFrame {
      */
 
     private void anzeigeEinzel() {
-        new BearbeitenEintrag(this, true);
+        new EditEntry(this, true);
     }
 
     /**
@@ -120,7 +120,7 @@ public class MiniDBStart extends JFrame {
      */
 
     private void anzeigeListe() {
-        new ListenAnzeige(this, true);
+        new ListView(this, true);
     }
     /*
      * ====================================== INNER CLASSES ======================================

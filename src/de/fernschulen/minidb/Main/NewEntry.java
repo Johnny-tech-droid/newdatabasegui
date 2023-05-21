@@ -1,5 +1,5 @@
 /**
- * NeuerEintrag.java
+ * NewEntry.java
  * Created by Johnny-tech-droid on 18.05.23
  * newdatabasegui
  * de.fernschulen.minidb.Main
@@ -19,12 +19,9 @@ import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-public class NeuerEintrag extends JDialog{
+public class NewEntry extends JDialog{
     /*
      * ============================ MEMBER VARIABLES HERE =====================
      */
@@ -41,7 +38,7 @@ public class NeuerEintrag extends JDialog{
      * ============================ CONSTRUCTOR =============================
      */
     //der Konstruktor
-    public NeuerEintrag(JFrame parent, boolean modal) {
+    public NewEntry(JFrame parent, boolean modal) {
         super(parent, modal);
         setTitle("Neuer Eintrag");
         //die Oberfläche erstellen
@@ -53,9 +50,9 @@ public class NeuerEintrag extends JDialog{
      */
 
     private JPanel initTextFields() {
-        GuiComponentFactory guiFactory = new GuiComponentFactory();
-        JPanel panel = guiFactory.createTextFieldPanel(FIELD_NAMES);
-        textFields = guiFactory.createTextFields(FIELD_NAMES);
+//        GuiComponentFactory guiFactory = new GuiComponentFactory();
+        JPanel panel = GuiComponentFactory.createTextFieldPanel(FIELD_NAMES);
+        textFields = GuiComponentFactory.createTextFields(FIELD_NAMES);
         return panel;
     }
     private void initGui() {
@@ -101,7 +98,7 @@ public class NeuerEintrag extends JDialog{
             resultSet.insertRow();
 
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Problem: \n" + e.toString());
+            JOptionPane.showMessageDialog(this, "Problem: \n" + e);
         } finally {
             MiniDBTools.schliessenDB(DB_URL);
         }
