@@ -9,7 +9,7 @@
 package de.fernschulen.minidb.Main.util;
 
 public class Properties {
-    private static final String DB_URL = "jdbc:derby:/Users/developer/Developer/newdatabasegui/miniDB";
+    private static final String DB_URL = "jdbc:derby:miniDB";
     private static final String[] FIELD_NAMES = {"NAME", "LASTNAME", "STREET", "POSTALCODE", "CITY", "PHONE"};
     private static final String[] FIELD_NAMES_EDIT = {"IDNUMBER", "NAME", "LASTNAME", "STREET", "POSTALCODE", "CITY", "PHONE"};
     private static final String[] BUTTON_TEXTS_MAIN = {"Listenanzeige", "Einzelanzeige", "Neuanzeige", "Ende"};
